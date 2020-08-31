@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for gameitem in gameitem_list %}
+        <div class="bg-teal-300 hover:bg-teal-200 py-1">
+            <div class="md:flex shadow-lg  mx-6 md:mx-auto my-4 max-w-lg md:max-w-5xl h-48">
+                <img class="h-full w-full md:w-1/4  object-cover rounded-lg rounded-r-none pb-5/6"
+{#                     src="https://ik.imagekit.io/q5edmtudmz/FB_IMG_15658659197157667_wOd8n5yFyXI.jpg" alt="bag">#}
+                     src="{{ gameitem.game_image_url }}" alt="{{ gameitem.name }}">
+                <div class="w-full md:w-3/4 px-4 py-4 bg-white rounded-r-lg border border-teal-900">
+                    <div class="flex items-center">
+                        <h2 class="text-xl text-gray-800 font-medium mr-auto">{{ gameitem.name}}</h2>
+                        <p class="text-gray-800 font-semibold tracking-tighter">
+                            only
+                            <i class="text-gray-600 line-through">{{ gameitem.old_price }}$</i>
+                            {{ gameitem.price }} $
+                        </p>
+                    </div>
+                    <p class="text-sm text-gray-700 mt-4">
+                        {{ gameitem.description }}
+                    </p>
+                    <div class="flex items-center justify-end mt-4 top-auto">
+                        <button class="bg-white text-red-500 px-4 py-2 rounded mr-auto hover:underline">Delete</button>
+                        <button class=" bg-gray-200 text-blue-600 px-2 py-2 rounded-md mr-2">Edit</button>
+                        <button class=" bg-blue-600 text-gray-200 px-2 py-2 rounded-md ">Publish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}
