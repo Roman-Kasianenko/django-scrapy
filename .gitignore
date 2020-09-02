@@ -131,4 +131,4 @@ dmypy.json
 .idea/
 **/migrations/*
 **/media/*
-**/static/admin/*
+**/static/*
