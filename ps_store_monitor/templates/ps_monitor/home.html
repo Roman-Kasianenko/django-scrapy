@@ -19,9 +19,19 @@
                         <h2 class="text-xl text-gray-800 font-medium mr-auto">{{ gameitem.name }}</h2>
                         <p class="text-gray-800 font-semibold tracking-tighter">
                             {% if not gameitem.newly_added %}
-                                only
-                                <i class="text-gray-600 line-through">{{ gameitem.old_price }}$</i>
-                                {{ gameitem.price }} $
+                                {% if gameitem.old_price %}
+                                    only
+                                    <i class="text-gray-600 line-through">{{ gameitem.price }} $</i>
+
+                                     <span class="text-xl">
+                                        {{ gameitem.old_price }}$
+                                    </span>
+                                {% else %}
+                                    <span class="text-xl">
+                                     {{ gameitem.price }} $
+                                    </span>
+
+                                {% endif %}
                             {% endif %}
                         </p>
                     </div>

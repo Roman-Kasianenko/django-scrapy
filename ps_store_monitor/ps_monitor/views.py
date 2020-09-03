@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
 
 from ps_monitor.models import GameItem
+from scrapy.crawler import CrawlerProcess, CrawlerRunner
+from crawler.crawler.spiders.ps import PsSpider
 
 
 class GameItemView(DetailView):
@@ -28,13 +30,14 @@ class GameItemNewlyAddedListView(ListView):
 class GameItemCreate(CreateView):
     model = GameItem
     fields = ['name', 'url']
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('ps_monitor:newly_added')
 
 
 def watch_unwatch(request, pk):
 
     item = GameItem.objects.filter(pk=pk).first()
-    item.newly_added = not item.newly_added
-    item.save()
+    if not item.newly_added:
+        item.newly_added = not item.newly_added
+        item.save()
 
     return redirect('ps_monitor:home')

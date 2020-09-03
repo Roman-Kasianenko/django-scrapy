@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 class GameItem(models.Model):
-    item_url = models.SlugField(max_length=160, unique=True, default='')
+    # item_url = models.SlugField(max_length=160, unique=True, default='')
     url = models.URLField(max_length=200, unique=True, blank=True, null=True)
     name = models.CharField("Name", max_length=100)
     description = models.TextField("Description", default='')
