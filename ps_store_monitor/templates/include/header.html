@@ -28,8 +28,16 @@
             </a>
         </div>
         <div>
-            <a href="#"
-               class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Sign in</a>
+            {% if user.is_authenticated %}
+                <span>Hi {{ user.username }}</span>
+                <a href="{% url 'logout' %}"
+                   class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}"
+                   class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+                <a href="{% url 'ps_monitor:signup' %}"
+                   class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Sign in</a>
+            {% endif %}
         </div>
     </div>
 </nav>

@@ -21,6 +21,7 @@ from ps_store_monitor import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
     path("", include(('ps_monitor.urls', 'ps_monitor'), namespace='ps_monitor'))
 ]
 

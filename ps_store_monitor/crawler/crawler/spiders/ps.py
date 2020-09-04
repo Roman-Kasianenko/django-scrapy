@@ -1,7 +1,7 @@
 import scrapy
 import re
 
-from ps_monitor.models import GameItem
+from ps_monitor.models import UrlItem
 
 try:
     from crawler.items import PsItem
@@ -15,12 +15,11 @@ class PsSpider(scrapy.Spider):
     start_urls = ['http://store.playstation.com/']
 
     def start_requests(self):
-        for item in GameItem.objects.all():
-            if item.newly_added:
-                yield scrapy.Request(url=item.url, callback=self.parse, meta={'pk': item.id})
+        for item in UrlItem.objects.all():
+            if item.need_to_monitor:
+                yield scrapy.Request(url=item.url, callback=self.parse)
 
     def parse(self, response):
-        pk = response.meta['pk']
         current_price = response.css('div.sku-info h3.price-display__price::text').get()
         old_price = response.css('div.sku-info div.price::text').get()
 
@@ -39,7 +38,6 @@ class PsSpider(scrapy.Spider):
         game_image_url = response.css('div.pdp__thumbnail-img div.product-image__img--main > img::attr(src)').get()
 
         item = {}
-        item['pk'] = pk
         item['url'] = response.url
         item['name'] = name
         item['description'] = description

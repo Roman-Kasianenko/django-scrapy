@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import GameItemView, GameItemCreate, GameItemListView, GameItemNewlyAddedListView, watch_unwatch
+from .views import GameItemView, GameItemCreate, GameItemListView, GameItemNewlyAddedListView, watch_unwatch, signup
 
 urlpatterns = [
     path('', GameItemListView.as_view(), name='home'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('new', GameItemCreate.as_view(), name='item_new'),
     path("item/<str:slug>/", GameItemView.as_view(), name="item_detail"),
     path("watch_unwatch/<int:pk>/", watch_unwatch, name="watch_unwatch"),
+    path(r'signup/', signup, name='signup'),
 ]
