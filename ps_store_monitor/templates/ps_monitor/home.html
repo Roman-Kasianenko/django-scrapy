@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% for gameitem in gameitem_list %}
+    {% for gameitem in items %}
         <div class="bg-teal-300 hover:bg-teal-200 py-1">
-            <div class="md:flex shadow-lg  mx-6 md:mx-auto my-4 max-w-lg md:max-w-5xl h-48">
+            <div class="md:flex shadow-lg  mx-6 md:mx-auto my-4 max-w-lg md:max-w-5xl h-auto">
                 {% if not gameitem.game_image_url %}
                     <svg class="h-full w-full md:w-1/4  object-cover rounded-lg rounded-r-none pb-5/6"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,7 +36,7 @@
                     <p class="text-sm text-gray-700 mt-4">
                         {{ gameitem.description }}
                     </p>
-                    <div class="flex items-center justify-end mt-4 top-auto">
+                    <div class="flex items-center justify-end mt-4 top-auto pt-5">
                         <button class="bg-white text-red-500 px-4 py-2 rounded mr-auto hover:underline">Delete</button>
 
                         <form action="{% url 'ps_monitor:watch_unwatch' pk=gameitem.id %}" method=POST>

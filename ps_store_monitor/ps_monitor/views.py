@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
@@ -7,20 +9,37 @@ from django.contrib.auth.forms import UserCreationForm
 from ps_monitor.models import GameItem, UrlItem
 
 
-class GameItemView(DetailView):
+class GameItemView(ListView):
     model = GameItem
     slug_field = "name"
+    template_name = "ps_monitor/gameitem_detail.html"
+
+    def get_queryset(self):
+        queryset = GameItem.objects.filter(url_item__in=UrlItem.objects.filter(user=self.request.user))\
+            .filter(name=self.kwargs['slug']).order_by('-updated_at')
+        return queryset
 
 
-class GameItemListView(ListView):
+class GameItemListView(LoginRequiredMixin, ListView):
     model = GameItem
     queryset = GameItem.objects.all()
     template_name = 'ps_monitor/home.html'
 
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        urls = UrlItem.objects.filter(user=self.request.user)
+        items = []
+        for url in urls:
+            gameitem = GameItem.objects.filter(url_item=url).order_by('-updated_at').first()
+            items.append(gameitem)
+
+        context['items'] = items
+        return context
+
 
 class GameItemNewlyAddedListView(ListView):
     model = GameItem
-    queryset = GameItem.objects.all()
+    queryset = GameItem.objects.filter()
     template_name = 'ps_monitor/newly_added.html'
 
 
@@ -28,6 +47,12 @@ class GameItemCreate(CreateView):
     model = UrlItem
     fields = ['name', 'url']
     success_url = reverse_lazy('ps_monitor:newly_added')
+
+    def form_valid(self, form):
+        self.item = form.save(commit=False)
+        self.item.user = self.request.user
+        self.item.save()
+        return redirect('ps_monitor:home')
 
 
 def watch_unwatch(request, pk):

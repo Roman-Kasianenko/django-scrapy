@@ -17,9 +17,10 @@ class PsSpider(scrapy.Spider):
     def start_requests(self):
         for item in UrlItem.objects.all():
             if item.need_to_monitor:
-                yield scrapy.Request(url=item.url, callback=self.parse)
+                yield scrapy.Request(url=item.url, callback=self.parse, meta={'pk': item.id})
 
     def parse(self, response):
+        pk = response.meta['pk']
         current_price = response.css('div.sku-info h3.price-display__price::text').get()
         old_price = response.css('div.sku-info div.price::text').get()
 
@@ -34,10 +35,11 @@ class PsSpider(scrapy.Spider):
         if not description:
             description = response.css('div.pdp__description ::text').getall()
 
-        description = ' '.join([d.strip() for d in description if d.strip()])[:250] + '...' if description else description
+        description = ' '.join([d.strip() for d in description if d.strip()])[:450] + '...' if description else description
         game_image_url = response.css('div.pdp__thumbnail-img div.product-image__img--main > img::attr(src)').get()
 
         item = {}
+        item['pk'] = pk
         item['url'] = response.url
         item['name'] = name
         item['description'] = description

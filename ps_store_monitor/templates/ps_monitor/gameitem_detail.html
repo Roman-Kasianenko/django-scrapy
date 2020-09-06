@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Item Details</h1>
-    <h2>Name: {{ object.name }}</h2>
-    url: {{ object.url }}
+    {% for gameitem in gameitem_list %}
+        <br/>
+        <h1>Item Details</h1>
+        <h2>Name: {{ gameitem.name }}</h2>
+        url: {{ gameitem.url }}
+        <br/>
+        updated_at: {{ gameitem.updated_at }}
+        <br/>
+        <br/>
+    {% endfor %}
 {% endblock %}
